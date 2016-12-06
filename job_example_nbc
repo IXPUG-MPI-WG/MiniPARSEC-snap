@@ -1,0 +1,15 @@
+#!/bin/bash
+#PBS -N minitest
+#PBS -l select=4:ncpus=24:mpiprocs=24:mem=100gb
+#PBS -q short
+
+cd $PBS_O_WORKDIR
+NTHREADS=1
+
+#(among other things) sets up ifort 2017 
+module restore dev17
+
+source ./mini_omp_def.sh $NTHREADS
+
+./mini_def_run.sh nbc
+# === END MARKER ===

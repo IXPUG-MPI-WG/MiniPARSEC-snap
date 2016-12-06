@@ -1,0 +1,18 @@
+#!/bin/bash
+#PBS -N minitest
+#PBS -l select=4:ncpus=24:mpiprocs=24:mem=100gb
+#PBS -q medium
+
+cd $PBS_O_WORKDIR
+NTHREADS=1
+
+#(among other things) sets up ifort 2016 
+module restore dev
+
+source ./mini_omp_def.sh $NTHREADS
+
+# will run the non threaded (and itac when enabled) if found
+./mini_def_run.sh mpi2
+./mini_def_run.sh nbc
+./mini_def_run.sh bc
+# === END MARKER ===

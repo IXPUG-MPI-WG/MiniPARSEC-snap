@@ -1,0 +1,33 @@
+# Compiled source #
+###################
+*.o
+*.so
+obj
+tmp
+html
+
+# Trash #
+# ##### #
+legacy
+
+# Tags #
+# #### #
+tags
+
+# Packages #
+############
+*.tar
+
+# Logs and databases #
+######################
+*.log
+
+# OS generated files #
+######################
+.svn
+._*
+.Trashes
+
+# make file stuff #
+# ############### #
+make.*

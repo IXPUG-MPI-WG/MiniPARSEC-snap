@@ -1,0 +1,27 @@
+#!/bin/bash
+#PBS -N minitest
+#PBS -l select=4:ncpus=24:mpiprocs=1:mem=100gb
+#PBS -q short
+
+
+cd $PBS_O_WORKDIR
+NTHREADS=24
+AMPLDIR=amplxe-cl.$NTHREADS
+mkdir $AMPLDIR
+cd $AMPLDIR
+
+#(among other things) sets up tools
+module restore devtools
+
+source ../mini_omp_def.sh $NTHREADS 
+
+# will run the omp benchmarks (and itac-omp when enabled)
+#mpirun -gtool "amplxe-cl -collect hotspots -r result:0" ../miniparsec.mpi2-omp-avx-g.mpi 65 0.4 1 10
+#concurrency with fast sampling
+#AMPLCLI='"amplxe-cl -collect-with runss -knob sampling-interval=1 -knob cpu-samples-mode=stack -knob signals-mode=stack -knob waits-mode=stack -knob io-mode=stack -r result:1  --start-paused --resume-after 8000"'
+#advanced hotspots with low level loop trip collection
+#AMPLCLI="amplxe-cl -collect-with runsa -knob enable-stack-collection=true -knob enable-call-counts=true -knob enable-trip-counts=true -knob event-config=CPU_CLK_UNHALTED.THREAD:sa=2400000,CPU_CLK_UNHALTED.REF_TSC:sa=2400000,INST_RETIRED.ANY:sa=2400000 -knob enable-context-switches=true -r result:2"
+#advanced hotspot with normal data collection
+#AMPLCLI="amplxe-cl -collect-with runsa -knob event-config=CPU_CLK_UNHALTED.THREAD:sa=2400000,CPU_CLK_UNHALTED.REF_TSC:sa=2400000,INST_RETIRED.ANY:sa=2400000 -r result:3"
+
+mpirun -gtool  "amplxe-cl -collect-with runss -knob sampling-interval=1 -knob cpu-samples-mode=stack -knob signals-mode=stack -knob waits-mode=stack -knob io-mode=stack --start-paused --resume-after 8000 -r result:1" ../miniparsec.mpi2-omp-avx-g.mpi 65 0.4 1 10

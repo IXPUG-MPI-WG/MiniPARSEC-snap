@@ -1,0 +1,19 @@
+#!/bin/bash
+#PBS -N minitest
+#PBS -l select=4:ncpus=24:mpiprocs=4:mem=100gb
+#PBS -q medium
+
+cd $PBS_O_WORKDIR
+NTHREADS=6
+
+#(among other things) sets up ifort 2017
+module restore dev17
+
+source ./mini_omp_def.sh $NTHREADS
+export MPICH_ASYNC_PROGRESS=1
+
+# will run the omp benchmarks (and itac-omp when enabled)
+./mini_def_run.sh bc-omp 
+./mini_def_run.sh nbc-omp 
+./mini_def_run.sh mpi2-omp
+# === END MARKER ===
